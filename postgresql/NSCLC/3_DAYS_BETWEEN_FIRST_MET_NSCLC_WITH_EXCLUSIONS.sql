@@ -56,44 +56,44 @@ combined_population_min_time_n AS (
   SELECT COUNT(DISTINCT person_id) as n FROM combined_population_min_time
 )
 SELECT 
-  n,
-  MIN(days_to_diag) as min_days_to_diag,
-   MIN(CASE
+  CASE WHEN n < 5 THEN -5 ELSE n END as n,
+  CASE WHEN n < 5 THEN NULL ELSE MIN(days_to_diag) END as min_days_to_diag,
+  CASE WHEN n < 5 THEN NULL ELSE MIN(CASE
             WHEN order_nr < .05 * n
                 THEN 9999
             ELSE days_to_diag
-            END) AS q5_days_to_diag,
- MIN(CASE
+            END) END AS q5_days_to_diag,
+  CASE WHEN n < 5 THEN NULL ELSE MIN(CASE
             WHEN order_nr < .10 * n
                 THEN 9999
             ELSE days_to_diag
-            END) AS q10_days_to_diag,
-     MIN(CASE
+            END) END AS q10_days_to_diag,
+  CASE WHEN n < 5 THEN NULL ELSE MIN(CASE
             WHEN order_nr < .25 * n
                 THEN 9999
             ELSE days_to_diag
-            END) AS q25_days_to_diag,
-    MIN(CASE
+            END) END AS q25_days_to_diag,
+  CASE WHEN n < 5 THEN NULL ELSE MIN(CASE
             WHEN order_nr < .50 * n
                 THEN 9999
             ELSE days_to_diag
-            END) AS median_days_to_diag,
-    MIN(CASE
+            END) END AS median_days_to_diag,
+  CASE WHEN n < 5 THEN NULL ELSE MIN(CASE
             WHEN order_nr < .75 * n
                 THEN 9999
             ELSE days_to_diag
-            END) AS q75_days_to_diag,
-    MIN(CASE
+            END) END AS q75_days_to_diag,
+  CASE WHEN n < 5 THEN NULL ELSE MIN(CASE
             WHEN order_nr < .9 * n
                 THEN 9999
             ELSE days_to_diag
-            END) AS q90_days_to_diag,
-        MIN(CASE
+            END) END AS q90_days_to_diag,
+  CASE WHEN n < 5 THEN NULL ELSE MIN(CASE
             WHEN order_nr < .95 * n
                 THEN 9999
             ELSE days_to_diag
-            END) AS q95_days_to_diag,
-    MAX(days_to_diag) AS max_days_to_diag
+            END) END AS q95_days_to_diag,
+  CASE WHEN n < 5 THEN NULL ELSE MAX(days_to_diag) END AS max_days_to_diag
 FROM combined_population_min_time
 JOIN combined_population_min_time_n as n
     ON 1=1

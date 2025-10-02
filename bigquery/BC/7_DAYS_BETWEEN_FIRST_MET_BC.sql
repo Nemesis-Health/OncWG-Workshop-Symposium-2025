@@ -38,44 +38,44 @@ combined_population_min_time as (
 combined_population_min_time_n as (
   select count(distinct person_id) as n from combined_population_min_time
 )
- select n,
-  min(days_to_diag) as min_days_to_diag,
-   min(case
+ select case when n < 5 then -5 else n end as n,
+  case when n < 5 then null else min(days_to_diag) end as min_days_to_diag,
+  case when n < 5 then null else min(case
             when order_nr < .05 * n
                 then 9999
             else days_to_diag
-            end) AS val_q5_days_to_diag,
- min(case
+            end) end AS val_q5_days_to_diag,
+  case when n < 5 then null else min(case
             when order_nr < .10 * n
                 then 9999
             else days_to_diag
-            end) AS val_q10_days_to_diag,
-     min(case
+            end) end AS val_q10_days_to_diag,
+  case when n < 5 then null else min(case
             when order_nr < .25 * n
                 then 9999
             else days_to_diag
-            end) AS val_q25_days_to_diag,
-    min(case
+            end) end AS val_q25_days_to_diag,
+  case when n < 5 then null else min(case
             when order_nr < .50 * n
                 then 9999
             else days_to_diag
-            end) as median_days_to_diag,
-    min(case
+            end) end as median_days_to_diag,
+  case when n < 5 then null else min(case
             when order_nr < .75 * n
                 then 9999
             else days_to_diag
-            end) AS val_q75_days_to_diag,
-    min(case
+            end) end AS val_q75_days_to_diag,
+  case when n < 5 then null else min(case
             when order_nr < .9 * n
                 then 9999
             else days_to_diag
-            end) AS val_q90_days_to_diag,
-        min(case
+            end) end AS val_q90_days_to_diag,
+  case when n < 5 then null else min(case
             when order_nr < .95 * n
                 then 9999
             else days_to_diag
-            end) AS val_q95_days_to_diag,
-    max(days_to_diag) as max_days_to_diag
+            end) end AS val_q95_days_to_diag,
+  case when n < 5 then null else max(days_to_diag) end as max_days_to_diag
  from combined_population_min_time
 join combined_population_min_time_n as n
     on 1=1

@@ -57,44 +57,44 @@ combined_population_treated_ranked as (
 combined_population_treated_n as (
   select count(distinct person_id) as n from combined_population_treated_ranked
 )
- select n,
-  min(days_to_treatment) as min_days_to_treatment,
-   min(case
+ select case when n < 5 then -5 else n end as n,
+  case when n < 5 then null else min(days_to_treatment) end as min_days_to_treatment,
+  case when n < 5 then null else min(case
             when order_nr < .05 * n
                 then 9999
             else days_to_treatment
-            end) AS val_q5_days_to_diag,
- min(case
+            end) end AS val_q5_days_to_diag,
+  case when n < 5 then null else min(case
             when order_nr < .10 * n
                 then 9999
             else days_to_treatment
-            end) AS val_q10_days_to_diag,
-     min(case
+            end) end AS val_q10_days_to_diag,
+  case when n < 5 then null else min(case
             when order_nr < .25 * n
                 then 9999
             else days_to_treatment
-            end) AS val_q25_days_to_diag,
-    min(case
+            end) end AS val_q25_days_to_diag,
+  case when n < 5 then null else min(case
             when order_nr < .50 * n
                 then 9999
             else days_to_treatment
-            end) as median_days_to_diag,
-    min(case
+            end) end as median_days_to_diag,
+  case when n < 5 then null else min(case
             when order_nr < .75 * n
                 then 9999
             else days_to_treatment
-            end) AS val_q75_days_to_diag,
-    min(case
+            end) end AS val_q75_days_to_diag,
+  case when n < 5 then null else min(case
             when order_nr < .9 * n
                 then 9999
             else days_to_treatment
-            end) AS val_q90_days_to_diag,
-        min(case
+            end) end AS val_q90_days_to_diag,
+  case when n < 5 then null else min(case
             when order_nr < .95 * n
                 then 9999
             else days_to_treatment
-            end) AS val_q95_days_to_diag,
-    max(days_to_treatment) as max_days_to_treatment
+            end) end AS val_q95_days_to_diag,
+  case when n < 5 then null else max(days_to_treatment) end as max_days_to_treatment
  from combined_population_treated_ranked
 join combined_population_treated_n n
     on 1 = 1

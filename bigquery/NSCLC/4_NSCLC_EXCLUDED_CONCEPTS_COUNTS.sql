@@ -43,10 +43,10 @@ diags_to_exclude as (
   where co.person_id in (select person_id from combined_population)
    group by  1, 2 )
    select c.concept_name, 
-       count(distinct d.person_id) as excluded_patient_count,
-       count(distinct case when d.n_conditions > 1 then d.person_id end) as excluded_patient_count_multiple,
-       count(distinct case when d.n_conditions > 2 then d.person_id end) as excluded_patient_count_multiple_2,
-       count(distinct case when d.n_conditions > 3 then d.person_id end) as excluded_patient_count_multiple_3
+       case when count(distinct d.person_id) < 5 then -5 else count(distinct d.person_id) end as excluded_patient_count,
+       case when count(distinct d.person_id) < 5 then null else count(distinct case when d.n_conditions > 1 then d.person_id end) end as excluded_patient_count_multiple,
+       case when count(distinct d.person_id) < 5 then null else count(distinct case when d.n_conditions > 2 then d.person_id end) end as excluded_patient_count_multiple_2,
+       case when count(distinct d.person_id) < 5 then null else count(distinct case when d.n_conditions > 3 then d.person_id end) end as excluded_patient_count_multiple_3
    from diags_to_exclude d
 join   @cdm_database_schema.concept c on c.concept_id = d.condition_concept_id
   group by  d.condition_concept_id, c.concept_name
