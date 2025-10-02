@@ -46,9 +46,9 @@ diags_to_exclude AS (
 )
 SELECT c.concept_name, 
        CASE WHEN COUNT(DISTINCT d.person_id) < 5 THEN -5 ELSE COUNT(DISTINCT d.person_id) END as excluded_patient_count,
-       CASE WHEN COUNT(DISTINCT d.person_id) < 5 THEN NULL ELSE COUNT(DISTINCT case when d.n_conditions > 1 then d.person_id end) END as excluded_patient_count_multiple,
-       CASE WHEN COUNT(DISTINCT d.person_id) < 5 THEN NULL ELSE COUNT(DISTINCT case when d.n_conditions > 2 then d.person_id end) END as excluded_patient_count_multiple_2,
-       CASE WHEN COUNT(DISTINCT d.person_id) < 5 THEN NULL ELSE COUNT(DISTINCT case when d.n_conditions > 3 then d.person_id end) END as excluded_patient_count_multiple_3
+       CASE WHEN COUNT(DISTINCT case when d.n_conditions > 1 then d.person_id end) < 5 THEN NULL ELSE COUNT(DISTINCT case when d.n_conditions > 1 then d.person_id end) END as excluded_patient_count_multiple,
+       CASE WHEN COUNT(DISTINCT case when d.n_conditions > 2 then d.person_id end) < 5 THEN NULL ELSE COUNT(DISTINCT case when d.n_conditions > 2 then d.person_id end) END as excluded_patient_count_multiple_2,
+       CASE WHEN COUNT(DISTINCT case when d.n_conditions > 3 then d.person_id end) < 5 THEN NULL ELSE COUNT(DISTINCT case when d.n_conditions > 3 then d.person_id end) END as excluded_patient_count_multiple_3
 FROM diags_to_exclude d
 JOIN   @cdm_database_schema.concept c on c.concept_id = d.condition_concept_id
 GROUP BY d.condition_concept_id, c.concept_name
