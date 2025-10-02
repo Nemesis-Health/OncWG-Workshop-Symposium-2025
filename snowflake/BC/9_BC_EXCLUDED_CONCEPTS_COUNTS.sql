@@ -41,7 +41,7 @@ diags_to_exclude AS (
   FROM @cdm_database_schema.condition_occurrence co
   INNER JOIN excluded_concepts cs 
     ON co.condition_concept_id = cs.concept_id
-  WHERE co.person_id not in (select person_id from combined_population)
+  WHERE co.person_id in (select person_id from combined_population)
   GROUP BY person_id, condition_concept_id
 )
 SELECT c.concept_name, 

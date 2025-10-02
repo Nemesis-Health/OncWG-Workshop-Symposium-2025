@@ -40,7 +40,7 @@ diags_to_exclude as (
    from @cdm_database_schema.condition_occurrence co
   inner join excluded_concepts cs 
     on co.condition_concept_id = cs.concept_id
-  where co.person_id not in (select person_id from combined_population)
+  where co.person_id in (select person_id from combined_population)
    group by  1, 2 )
    select c.concept_name, 
        count(distinct d.person_id) as excluded_patient_count,
